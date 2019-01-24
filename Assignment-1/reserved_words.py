@@ -39,6 +39,7 @@ keywords = [
 	'with',
 	'yield'
 ]			# from https://www.scala-lang.org/docu/files/ScalaReference.pdf, Page 4
+# how should we handle the non english reserved characters?
 
 data_types = [
 	'Byte',
