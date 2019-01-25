@@ -41,6 +41,10 @@ keywords = [
 ]			# from https://www.scala-lang.org/docu/files/ScalaReference.pdf, Page 4
 # how should we handle the non english reserved characters?
 
+non_english_keywords = ['_', ':', '=', '=>', '<-', '<:', '<%', '>:', '#', '@']
+
+keywords += non_english_keywords
+
 data_types = [
 	'Byte',
 	'Short',
@@ -58,9 +62,11 @@ data_types = [
 	'AnyRef'
 ]			# from https://www.tutorialspoint.com/scala/scala_data_types.htm
 
-reserved = { word:("R_" + word.upper()) for word in keywords }
+reserved = { word:("RESERVED_" + word.upper()) for word in keywords }
 for data_type in data_types:
-	reserved[data_type] = "TYPE_" + data_type.upper() 
+	reserved[data_type] = "TYPE_" + data_type.upper()
+
+
 
 # for key in reserved:
 # 	print(key,reserved[key])
