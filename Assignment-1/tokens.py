@@ -23,6 +23,6 @@ end_of_lines = ['SEMI_COLON', 'NEWLINE_CHAR']
 
 named_tokens = ['ID','BOOL', 'CHAR', 'STRING', 'INT', 'FLOAT']	# should we just use NUM?
 
+miscellaneous = ['LEFTARROW']					# added
 
-# These are left:
-#'LEFTARROW' and the keywords
+tokens = keywords + comp + brackets + operations + logical_operations + assignment_symbols + characters + end_of_lines + named_tokens
