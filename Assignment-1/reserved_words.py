@@ -41,9 +41,9 @@ keywords = [
 ]			# from https://www.scala-lang.org/docu/files/ScalaReference.pdf, Page 4
 # how should we handle the non english reserved characters?
 
-non_english_keywords = ['_', ':', '=', '=>', '<-', '<:', '<%', '>:', '#', '@']
+#non_english_keywords = ['_', ':', '=', '=>', '<-', '<:', '<%', '>:', '#', '@']
 
-keywords += non_english_keywords
+#keywords += non_english_keywords
 
 data_types = [
 	'Byte',
