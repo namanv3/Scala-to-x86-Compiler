@@ -25,4 +25,4 @@ named_tokens = ['ID','BOOL', 'CHAR', 'STRING', 'INT', 'FLOAT']	# should we just 
 
 miscellaneous = ['LEFTARROW']					# added
 
-tokens = reserved + comp + brackets + operations + logical_operations + assignment_symbols + characters + end_of_lines + named_tokens + miscellaneous
+tokens = list(reserved.values()) + comp + brackets + operations + logical_operations + assignment_symbols + characters + end_of_lines + named_tokens + miscellaneous
