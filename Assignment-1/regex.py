@@ -67,3 +67,25 @@ def t_FLOAT(t):
 #         t.value = t.value[:-1]
 #     t.value = float(t.value)
 #     return t
+
+def t_INT(t):
+    r'((0[xX][0-9a-fA-F]+)|([+-]?[1-9][0-9]*))([lL]?)'
+    if len(t.value) > 1 and (t.value[1] == 'x' or t.value[1] == 'X'):
+        return t
+    if t.value[-1] == 'L' or t.value[-1] == 'l':
+        t.value=t.value[:-1]
+    t.value = int(t.value)
+    return t
+
+
+# def t_INT(t):
+#     r'(((((0x)|(0X))[0-9a-fA-F]+)|(\d+))([uU]|[lL]|[uU][lL]|[lL][uU])?)'
+#	  # r'(0|[1-9](\d+)|(((0x)|(0X))[0-9A-Fa-f]+))[lL]?'
+#     #print t.value
+#     if len(t.value) > 1 and (t.value[1]=='x' or t.value[1]=='X'):
+#       #  print t 
+#         return t
+#     if t.value[-1]=='L' or t.value[-1]=='l':
+#         t.value=t.value[:-1]
+#     t.value = int(t.value)
+#     return t
