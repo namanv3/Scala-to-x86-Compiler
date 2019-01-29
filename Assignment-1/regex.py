@@ -53,3 +53,17 @@ t_COLON = r':'
 t_DOT = r'\.'
 t_COMMA = r'\,'
 t_SEMI_COLON = r';'
+
+def t_FLOAT(t):
+	r'[-+]?([0-9]+(\.[0-9]+)?|\.[0-9]+)([Ee][+-]?[0-9]+)?([FfDd])?'
+	if (t.value[-1]=='F' or t.value[-1]=='f' or t.value[-1]=='D' or t.value[-1]=='d'):
+        t.value = t.value[:-1]
+    t.value = float(t.value)
+    return t
+
+# def t_FLOAT(t):
+#     r'((\d+)?(\.)(\d+)([Ee][+-]?(\d+))?([FfDd])?) | ((\d)+([Ee][+-]?(\d+))?([FfDd]))|((\d)+([Ee][+-](\d+))([FfDd])?)'
+#     if (t.value[-1]=='F' or t.value[-1]=='f' or t.value[-1]=='D' or t.value[-1]=='d'):
+#         t.value = t.value[:-1]
+#     t.value = float(t.value)
+#     return t
