@@ -77,6 +77,16 @@ def t_INT(t):
     t.value = int(t.value)
     return t
 
+def t_CHAR(t):
+    r'\'([^\\\'\r\n\\[^\r\n]|\\u[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f])(\'|\\)'
+    return t 
+
+def t_STRING(t):
+   # r'\"([^\"]|\"|\\|\n|\b)*\"'
+    r'\"(\\.|[^\\"]| )*\"'
+    t.value = t.value[1:-1]
+    return t
+
 
 # def t_INT(t):
 #     r'(((((0x)|(0X))[0-9a-fA-F]+)|(\d+))([uU]|[lL]|[uU][lL]|[lL][uU])?)'
