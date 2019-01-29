@@ -24,13 +24,13 @@ characters = ['COLON', 'DOT', 'COMMA']
 
 end_of_lines = ['SEMI_COLON', 'NEWLINE_CHAR']
 
-named_tokens = ['ID','BOOL', 'CHAR', 'STRING', 'INT', 'FLOAT']	
+named_tokens = ['ID','BOOL', 'CHAR', 'STRING', 'INT', 'FLOAT']
 
 miscellaneous = ['LEFTARROW']					# added
 
-tokens = list(reserved.values()) + comp + brackets + operations 
-	+ logical_operations + assignment_symbols + characters
-	+ end_of_lines + named_tokens + miscellaneous
+# tokens = list(reserved.values()) + comp + brackets + operations 
+#	 + logical_operations + assignment_symbols + characters 
+#	 + end_of_lines + named_tokens + miscellaneous
 
 """
 Section 4.3 of https://www.dabeaz.com/ply/ply.html says that we need to have
@@ -60,5 +60,7 @@ tokens = [
 
 	'COLON', 'DOT', 'COMMA',
 
-	'SEMI_COLON'
-]
+	'SEMI_COLON',
+
+	'ID', 'CHAR', 'STRING', 'INT', 'FLOAT'
+] + list(reserved.values())
