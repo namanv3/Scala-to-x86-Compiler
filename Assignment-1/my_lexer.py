@@ -70,13 +70,14 @@ with open("Coloured.html", "w") as htm_file:
 		htm_file.write("Lexed_file")
 		htm_file.write("</title>\n")
 		htm_file.write("<body>\n")
-		while curr_col != max_col:
+		while tok_counter != no_tok:
 			if tok_store[tok_list[no_tok - 1]][3] == curr_col:
 				htm_file.write("<font color = %s>" % colors[tok_store[tok_list[tok_counter]][0]])
 				htm_file.write("%s" % tok_list[tok_counter])
 				htm_file.write("</font">
 				htm_file.write("\n")
 				curr_col += len(tok_store[tok_list[no_tok - 1]][1])
+				tok_counter += 1
 			else:
 				htm_file.write(" &nbsp; ")
 				curr_col += 1
