@@ -1,5 +1,5 @@
-from ../tokens import *
-from ../reserved_words import *
+from tokens import *
+from reserved_words import *
 
 colour = {}
 for d in data_types:
