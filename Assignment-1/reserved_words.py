@@ -37,7 +37,8 @@ keywords = [
 	'var',
 	'while',
 	'with',
-	'yield'
+	'yield',
+	'_'
 ]			# from https://www.scala-lang.org/docu/files/ScalaReference.pdf, Page 4
 # how should we handle the non english reserved characters?
 

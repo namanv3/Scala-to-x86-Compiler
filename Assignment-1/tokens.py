@@ -62,5 +62,7 @@ tokens = [
 
 	'SEMI_COLON',
 
-	'ID', 'CHAR', 'STRING', 'INT', 'FLOAT'
+	'ID', 'CHAR', 'STRING', 'INT', 'FLOAT',
+
+	'MCOMMENT', 'SCOMMENT'
 ] + list(reserved.values())
