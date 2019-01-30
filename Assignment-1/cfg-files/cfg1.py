@@ -1,5 +1,5 @@
-from tokens import *
-from reserved_words import *
+from ../tokens import *
+from ../reserved_words import *
 
 colour = {}
 for d in data_types:
@@ -24,3 +24,9 @@ for m in end_of_lines:
 	colour[m] = 'Pink'
 for m in miscellaneous:
 	colour[m] = 'Pink'
+
+print colour
+
+with open("Config_file1.txt", "w") as text_file:
+	for i in colour.keys():
+	    text_file.write("%s:%s\n" % (i,colour[i]))
