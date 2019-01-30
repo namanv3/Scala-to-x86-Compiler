@@ -1,4 +1,5 @@
 from tokens import tokens
+from lex import TOKEN
 
 # for t in tokens:
 # 	print(f"t_{t} = ")
@@ -77,6 +78,18 @@ def t_INT(t):
     t.value = int(t.value)
     return t
 
+# def t_INT(t):
+#     r'(((((0x)|(0X))[0-9a-fA-F]+)|(\d+))([uU]|[lL]|[uU][lL]|[lL][uU])?)'
+#     # r'(0|[1-9](\d+)|(((0x)|(0X))[0-9A-Fa-f]+))[lL]?'
+#     #print t.value
+#     if len(t.value) > 1 and (t.value[1]=='x' or t.value[1]=='X'):
+#       #  print t 
+#         return t
+#     if t.value[-1]=='L' or t.value[-1]=='l':
+#         t.value=t.value[:-1]
+#     t.value = int(t.value)
+#     return t
+
 def t_CHAR(t):
     r'\'([^\\\'\r\n\\[^\r\n]|\\u[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f])(\'|\\)'
     return t 
@@ -88,14 +101,33 @@ def t_STRING(t):
     return t
 
 
-# def t_INT(t):
-#     r'(((((0x)|(0X))[0-9a-fA-F]+)|(\d+))([uU]|[lL]|[uU][lL]|[lL][uU])?)'
-#	  # r'(0|[1-9](\d+)|(((0x)|(0X))[0-9A-Fa-f]+))[lL]?'
-#     #print t.value
-#     if len(t.value) > 1 and (t.value[1]=='x' or t.value[1]=='X'):
-#       #  print t 
-#         return t
-#     if t.value[-1]=='L' or t.value[-1]=='l':
-#         t.value=t.value[:-1]
-#     t.value = int(t.value)
-#     return t
+digit            = r'([0-9])'
+nondigit         = r'([_A-Za-z])'
+identifier = r'(' + nondigit + r'(' + digit + r'|' + nondigit + r')*)'
+
+@TOKEN(identifier)
+def t_ID(t):
+    t.type = reserved.get(t.value,'ID')    # Check for reserved words
+    return t
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+    pass
+
+t_ignore = ' \t'
+
+#handling nested comments and single line comments
+def t_MCOMMENT(t):
+    r'(/\*(\n|.)*?\*/)'
+    t.lexer.lineno += t.value.count('\n')
+
+def t_SCOMMENT(t):
+    r'(//.*?\n)'
+    t.lexer.lineno += t.value.count('\n')
+
+# error handling 
+def t_error(t):
+    print "Illegal character '%s'" % t.value[0]
+    t.lexer.skip(1)
+    pass
