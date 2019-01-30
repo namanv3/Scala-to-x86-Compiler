@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
-import lex as lex
+import ply.lex as lex
 import string
 from tokens import *
 from reserved_words import *
-import regex
+from regex import *
 import sys, getopt
 
 inputfile = ''
@@ -74,7 +74,7 @@ with open("Coloured.html", "w") as htm_file:
 			if tok_store[tok_list[no_tok - 1]][3] == curr_col:
 				htm_file.write("<font color = %s>" % colors[tok_store[tok_list[tok_counter]][0]])
 				htm_file.write("%s" % tok_list[tok_counter])
-				htm_file.write("</font">
+				htm_file.write("</font>")
 				htm_file.write("\n")
 				curr_col += len(tok_store[tok_list[no_tok - 1]][1])
 				tok_counter += 1
