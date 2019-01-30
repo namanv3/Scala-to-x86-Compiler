@@ -58,12 +58,12 @@ for i in lines:
 	colors[i[0:j]] = i[(j+1):len(i)-1]
 print colors
 
+inp1 = inp
 tok_counter = 0
 no_tok = len(tok_list)
-max_row = tok_store[tok_list[no_tok - 1]][2]
 curr_row = 0 
 curr_col = 0
-max_col = tok_store[tok_list[no_tok - 1]][3] + len(tok_store[tok_list[no_tok - 1]][1])
+max_col = tok_store[tok_list[no_tok - 1]].lexpos + len(tok_store[tok_list[no_tok - 1]].value)
 with open("Coloured.html", "w") as htm_file:
 		htm_file.write("<html> \n")
 		htm_file.write("<title>\n")
@@ -71,15 +71,25 @@ with open("Coloured.html", "w") as htm_file:
 		htm_file.write("</title>\n")
 		htm_file.write("<body>\n")
 		while tok_counter != no_tok:
-			if tok_store[tok_list[no_tok - 1]][3] == curr_col:
-				htm_file.write("<font color = %s>" % colors[tok_store[tok_list[tok_counter]][0]])
-				htm_file.write("%s" % tok_list[tok_counter])
+			if tok_store[tok_list[tok_counter]].lexpos == curr_col:
+				if (tok_counter+1) != no_tok:
+					to_print = inp1[curr_col:tok_store[tok_list[tok_counter+1]].lexpos
+					curr_col = tok_store[tok_list[tok_counter+1]].lexpos
+				else:
+					to_print = inp1[curr_col:]
+				htm_file.write("<font color = %s>" % colors[tok_store[tok_list[tok_counter]].type])
+				htm_file.write("<pre>")
+				htm_file.write("%s" % to_print)
+				htm_file.write("</pre>")
 				htm_file.write("</font>")
 				htm_file.write("\n")
-				curr_col += len(tok_store[tok_list[no_tok - 1]][1])
 				tok_counter += 1
 			else:
-				htm_file.write(" &nbsp; ")
-				curr_col += 1
+				to_print = inp1[:tok_store[tok_list[tok_counter]].lexpos
+				curr_col = tok_store[tok_list[tok_counter]].lexpos
+				htm_file.write("<pre>")
+				htm_file.write("%s" % to_print)
+				htm_file.write("</pre>")				
+
 		htm_file.write("</body>\n")
 		htm_file.write("</html>\n")
