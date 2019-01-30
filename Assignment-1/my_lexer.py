@@ -19,9 +19,11 @@ def GetArgs(argv):
       		sys.exit(2)
    	for opt, arg in opts:
       		if opt in ("-i", "--cfg"):
-         		inputfile = arg
+         		cfgfile = arg
       		elif opt in ("-o", "--out"):
          		outputfile = arg
+		else:
+			inputfile = arg
 
 GetArgs(sys.argv[1:])
 lexer=lex.lex()
@@ -44,7 +46,7 @@ while True:
         print tok
         tok_store[tok.value] = tok
         tok_list.append(tok.value)
-f = open('Config_file1.txt', "r")
+f = open(cfgfile, "r")
 # use readlines to read all lines in the file
 # The variable "lines" is a list containing all lines in the file
 colors = {}
@@ -64,7 +66,7 @@ no_tok = len(tok_list)
 curr_row = 0 
 curr_col = 0
 max_col = tok_store[tok_list[no_tok - 1]].lexpos + len(tok_store[tok_list[no_tok - 1]].value)
-with open("Coloured.html", "w") as htm_file:
+with open(outputfile, "w") as htm_file:
 		htm_file.write("<html> \n")
 		htm_file.write("<title>\n")
 		htm_file.write("Lexed_file")
