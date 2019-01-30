@@ -1,17 +1,36 @@
+#!/usr/bin/python
 
 import lex as lex
 import string
 from tokens import *
 from reserved_words import *
 import regex
+import sys, getopt
 
+inputfile = ''
+outputfile = ''
+
+def GetArgs(argv):
+	global inputfile, outputfile
+	try:
+      		opts, args = getopt.getopt(argv,"i:o:",["cfg=","out="])
+   	except getopt.GetoptError:
+      		print 'Error'
+      		sys.exit(2)
+   	for opt, arg in opts:
+      		if opt in ("-i", "--cfg"):
+         		inputfile = arg
+      		elif opt in ("-o", "--out"):
+         		outputfile = arg
+
+GetArgs(sys.argv[1:])
 lexer=lex.lex()
 
-file = open(sys.argv[1],"r")
+file = open(inputfile,"r")
 inp = file.read()
 file.close()
 
-file1 = open(sys.argv[1],"r")
+file1 = open(inputfile,"r")
 in_lines = file1.readlines()
 file1.close()
 
@@ -49,7 +68,7 @@ normie_chars.append('_')
 
 line_counter =0
 tok_counter = 0
-with open("Coloured.html", "w") as htm_file:
+with open(outputfile, "w") as htm_file:
 		htm_file.write("<html> \n")
 		htm_file.write("<title>\n")
 		htm_file.write("Lexed_file")
