@@ -28,7 +28,7 @@ f = open('Config_file1.txt', "r")
 colors = {}
 lines = f.readlines()
 
-# make dictionary of all colours of tokens with token.type as key
+# dictionary of all colours of tokens with token.type as key
 for i in lines:
 	for j in range(0,len(i)):
 		if i[j] == ":":
