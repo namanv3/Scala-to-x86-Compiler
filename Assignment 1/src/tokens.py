@@ -16,7 +16,7 @@ assignment_symbols = [
 	'AND_ASGN', 'OR_ASGN', 'XOR_ASGN', 'LSHIFT_ASGN', 'RSHIFT_ASGN']
 
 '''
-above five arrays from: 
+above five arrays from:
 https://www.tutorialspoint.com/scala/scala_operators.htm
 '''
 
@@ -28,8 +28,8 @@ named_tokens = ['ID','BOOL', 'CHAR', 'STRING', 'INT', 'FLOAT']
 
 miscellaneous = ['LEFTARROW']					# added
 
-# tokens = list(reserved.values()) + comp + brackets + operations 
-#	 + logical_operations + assignment_symbols + characters 
+# tokens = list(reserved.values()) + comp + brackets + operations
+#	 + logical_operations + assignment_symbols + characters
 #	 + end_of_lines + named_tokens + miscellaneous
 
 """
@@ -43,11 +43,11 @@ tokens = [
 	'ADD_ASGN', 'SUB_ASGN', 'MULT_ASGN', 'DIV_ASGN', 'MOD_ASGN',
 	'AND_ASGN', 'OR_ASGN', 'XOR_ASGN', 'LSHIFT_ASGN', 'RSHIFT_ASGN',
 
-	'OP_RRSHIFT', 'OP_RSHIFT', 'OP_LSHIFT', 
+	'OP_RRSHIFT', 'OP_RSHIFT', 'OP_LSHIFT',
 
 	'LO_AND', 'LO_OR',
 
-	'LEFTARROW',
+	'LEFTARROW', 'RIGHTARROW',
 
 	'GEQ', 'LEQ', 'GT', 'LT', 'EQ', 'NEQ',
 
@@ -64,5 +64,5 @@ tokens = [
 
 	'ID', 'CHAR', 'STRING', 'INT', 'FLOAT',
 
-	'MCOMMENT', 'SCOMMENT'
+	'SCOMMENT'
 ] + list(reserved.values())
