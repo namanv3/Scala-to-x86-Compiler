@@ -1,0 +1,79 @@
+keywords = [
+	'abstract',
+	'break',
+	'case',
+	'catch',
+	'class',
+	'continue',
+	'def',
+	'default',
+	'do',
+	'else',
+	'extends',
+	'false',
+	'final',
+	'finally',
+	'for',
+	'forSome',
+	'if',
+	'implicit',
+	'import',
+	'lazy',
+	'match',
+	'new',
+	'null',
+	'object',
+	'override',
+	'package',
+	'private',
+	'protected',
+	'public',
+	'return',
+	'sealed',
+	'switch',
+	'super',
+	'this',
+	'throw',
+	'trait',
+	'true',
+	'try',
+	'type',
+	'val',
+	'var',
+	'while',
+	'with',
+	'yield',
+	'_'
+]			# from https://www.scala-lang.org/docu/files/ScalaReference.pdf, Page 4
+# how should we handle the non english reserved characters?
+
+#non_english_keywords = ['_', ':', '=', '=>', '<-', '<:', '<%', '>:', '#', '@']
+
+#keywords += non_english_keywords
+
+data_types = [
+	'Array',
+	'Byte',
+	'Short',
+	'Int',
+	'Long',
+	'Float',
+	'Double',
+	'Char',
+	'String',
+	'Boolean',
+	'Unit',
+	'Null',
+	'Nothing',
+	'Any',
+	'AnyRef'
+]			# from https://www.tutorialspoint.com/scala/scala_data_types.htm
+
+reserved = { word:("RESERVED_" + word.upper()) for word in keywords }
+for data_type in data_types:
+	reserved[data_type] = "TYPE_" + data_type.upper()
+
+
+
+# for key in reserved:
+# 	print(key,reserved[key])
