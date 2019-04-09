@@ -1,0 +1,58 @@
+1: BEGIN FUNCTION recurse.exponentiation:
+2: if a==0 goto 5
+3: $t1 = 0
+4: goto 6
+5: $t1 = 1
+6: if $t1 = 0 goto  ELSE0
+7: return 1
+8: goto AFTER0
+9: ELSE0:
+10: AFTER0:
+11: if b==0 goto 14
+12: $t2 = 0
+13: goto 15
+14: $t2 = 1
+15: if $t2 = 0 goto  ELSE1
+16: return 1
+17: goto AFTER1
+18: ELSE1:
+19: AFTER1:
+20: y := a
+21: $t3 = b%2
+22: if $t3==0 goto 25
+23: $t4 = 0
+24: goto 26
+25: $t4 = 1
+26: if $t4 = 0 goto  ELSE2
+27: $t1 = b int / 2
+28: $t2 := a
+29: param $t2
+30: $t3 := $t1
+31: param $t3
+32: refparam $result0
+33: call exponentiation, 2
+34: y := $result0
+35: $t5 = y int * y
+36: y := $t5
+37: goto AFTER2
+38: ELSE2:
+39: $t1 = b int - 1
+40: $t2 := a
+41: param $t2
+42: $t3 := $t1
+43: param $t3
+44: refparam $result1
+45: call exponentiation, 2
+46: $t4 = y int * $result1
+47: y := $t4
+48: AFTER2:
+49: return y
+50: END FUNCTION
+51: BEGIN FUNCTION recurse.main:
+52: $t1 := 12
+53: param $t1
+54: $t2 := 3
+55: param $t2
+56: refparam $result2
+57: call exponentiation, 2
+58: END FUNCTION

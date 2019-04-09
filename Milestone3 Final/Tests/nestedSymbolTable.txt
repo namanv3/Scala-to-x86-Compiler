@@ -1,0 +1,137 @@
+{
+    "functions": {}, 
+    "classes": {}, 
+    "scope_name": "none", 
+    "temp": 0, 
+    "parent": "None", 
+    "offset": 0, 
+    "variables": {}, 
+    "type": "none"
+}{
+    "paramoffset": -8, 
+    "functions": {
+        "nested_if": {
+            "fname": "nested_if", 
+            "fdef": 1
+        }
+    }, 
+    "name": "FactorialRecursion", 
+    "parent": "none", 
+    "offset": 0, 
+    "temp": 0, 
+    "variables": {}, 
+    "type": "OBJECT"
+}{
+    "paramoffset": -8, 
+    "functions": {}, 
+    "name": "nested_if", 
+    "parent": "FactorialRecursion", 
+    "rType": "VOID", 
+    "temp": 1, 
+    "variables": {
+        "y": {
+            "offset": 12, 
+            "type": "INT", 
+            "size": 4
+        }, 
+        "x": {
+            "offset": 8, 
+            "type": "INT", 
+            "size": 4
+        }, 
+        "$t1": {
+            "type": "BOOL", 
+            "size": 1
+        }, 
+        "z": {
+            "offset": 16, 
+            "type": "INT", 
+            "size": 4
+        }, 
+        "a": {
+            "offset": 20, 
+            "type": "INT", 
+            "size": 4
+        }
+    }, 
+    "offset": 20, 
+    "type": "functions"
+}{
+    "functions": {}, 
+    "name": "scope_0", 
+    "parent": "nested_if", 
+    "variables": {
+        "$t2": {
+            "type": "BOOL", 
+            "size": 1
+        }, 
+        "$t1": {
+            "type": "BOOL", 
+            "size": 1
+        }
+    }, 
+    "temp": 2, 
+    "offset": 20, 
+    "type": "scope"
+}{
+    "functions": {}, 
+    "name": "scope_1", 
+    "parent": "scope_0", 
+    "variables": {}, 
+    "temp": 1, 
+    "offset": 20, 
+    "type": "scope"
+}{
+    "functions": {}, 
+    "name": "scope_2", 
+    "parent": "scope_0", 
+    "variables": {}, 
+    "temp": 1, 
+    "offset": 20, 
+    "type": "scope"
+}{
+    "functions": {}, 
+    "name": "scope_3", 
+    "parent": "scope_0", 
+    "variables": {}, 
+    "temp": 1, 
+    "offset": 20, 
+    "type": "scope"
+}{
+    "functions": {}, 
+    "name": "scope_4", 
+    "parent": "scope_0", 
+    "variables": {}, 
+    "temp": 1, 
+    "offset": 20, 
+    "type": "scope"
+}{
+    "functions": {}, 
+    "name": "scope_5", 
+    "parent": "nested_if", 
+    "variables": {
+        "$t2": {
+            "type": "BOOL", 
+            "size": 1
+        }
+    }, 
+    "temp": 2, 
+    "offset": 20, 
+    "type": "scope"
+}{
+    "functions": {}, 
+    "name": "scope_6", 
+    "parent": "scope_5", 
+    "variables": {}, 
+    "temp": 1, 
+    "offset": 20, 
+    "type": "scope"
+}{
+    "functions": {}, 
+    "name": "scope_7", 
+    "parent": "scope_5", 
+    "variables": {}, 
+    "temp": 1, 
+    "offset": 20, 
+    "type": "scope"
+}

@@ -1,0 +1,130 @@
+{
+    "functions": {}, 
+    "classes": {}, 
+    "scope_name": "none", 
+    "temp": 0, 
+    "parent": "None", 
+    "offset": 0, 
+    "variables": {}, 
+    "type": "none"
+}{
+    "paramoffset": -8, 
+    "functions": {
+        "main": {
+            "fname": "main", 
+            "fdef": 1
+        }, 
+        "exponentiation": {
+            "fname": "exponentiation", 
+            "fdef": 1
+        }
+    }, 
+    "name": "recurse", 
+    "parent": "none", 
+    "offset": 0, 
+    "temp": 0, 
+    "variables": {}, 
+    "type": "OBJECT"
+}{
+    "paramoffset": -8, 
+    "functions": {}, 
+    "name": "exponentiation", 
+    "parent": "recurse", 
+    "rType": "INT", 
+    "temp": 4, 
+    "variables": {
+        "a": {
+            "offset": 8, 
+            "type": "INT", 
+            "size": 4
+        }, 
+        "b": {
+            "offset": 12, 
+            "type": "INT", 
+            "size": 4
+        }, 
+        "$t3": {
+            "type": "INT", 
+            "size": 4
+        }, 
+        "y": {
+            "offset": 16, 
+            "type": "INT", 
+            "size": 4
+        }, 
+        "$t2": {
+            "type": "BOOL", 
+            "size": 1
+        }, 
+        "$t1": {
+            "type": "BOOL", 
+            "size": 1
+        }, 
+        "$t4": {
+            "type": "BOOL", 
+            "size": 1
+        }
+    }, 
+    "offset": 16, 
+    "type": "functions"
+}{
+    "functions": {}, 
+    "name": "scope_0", 
+    "parent": "exponentiation", 
+    "variables": {}, 
+    "temp": 0, 
+    "offset": 12, 
+    "type": "scope"
+}{
+    "functions": {}, 
+    "name": "scope_1", 
+    "parent": "exponentiation", 
+    "variables": {}, 
+    "temp": 0, 
+    "offset": 12, 
+    "type": "scope"
+}{
+    "functions": {}, 
+    "name": "scope_2", 
+    "parent": "exponentiation", 
+    "variables": {
+        "$t1": {
+            "type": "INT", 
+            "size": 4
+        }, 
+        "$t5": {
+            "type": "INT", 
+            "size": 4
+        }
+    }, 
+    "temp": 6, 
+    "offset": 16, 
+    "type": "scope"
+}{
+    "functions": {}, 
+    "name": "scope_3", 
+    "parent": "exponentiation", 
+    "variables": {
+        "$t1": {
+            "type": "INT", 
+            "size": 4
+        }, 
+        "$t4": {
+            "type": "INT", 
+            "size": 4
+        }
+    }, 
+    "temp": 5, 
+    "offset": 16, 
+    "type": "scope"
+}{
+    "paramoffset": -8, 
+    "functions": {}, 
+    "name": "main", 
+    "parent": "recurse", 
+    "rType": "VOID", 
+    "temp": 2, 
+    "variables": {}, 
+    "offset": 4, 
+    "type": "functions"
+}

@@ -1,0 +1,41 @@
+1: BEGIN FUNCTION FactorialRecursion.nested_if:
+2: if x==0 goto 5
+3: $t1 = 0
+4: goto 6
+5: $t1 = 1
+6: if $t1 = 0 goto  ELSE0
+7: if y==0 goto 10
+8: $t1 = 0
+9: goto 11
+10: $t1 = 1
+11: if $t1 = 0 goto  ELSE1
+12: z := 1
+13: goto AFTER0
+14: ELSE1:
+15: z := 2
+16: AFTER0:
+17: if x==0 goto 20
+18: $t2 = 0
+19: goto 21
+20: $t2 = 1
+21: if $t2 = 0 goto  ELSE2
+22: z := 3
+23: goto AFTER1
+24: ELSE2:
+25: z := 4
+26: AFTER1:
+27: goto AFTER2
+28: ELSE0:
+29: y := 1
+30: if a==0 goto 33
+31: $t2 = 0
+32: goto 34
+33: $t2 = 1
+34: if $t2 = 0 goto  ELSE3
+35: a := 1
+36: goto AFTER3
+37: ELSE3:
+38: a := 11
+39: AFTER3:
+40: AFTER2:
+41: END FUNCTION
