@@ -38,6 +38,17 @@ else_max = -1
 return_curr = []
 return_max = -1
 
+for_begin_curr = []
+for_begin_max = -1
+for_after_curr = []
+for_after_max = -1
+
+upd_curr = []
+upd_max = -1
+
+L_curr = []
+L_max = -1
+
 f = open(inputfile[:-6] + "IR.txt", 'w+')
 
 def typecheck(p):
@@ -290,8 +301,7 @@ def p_expr(p):
 			| RESERVED_IF LPARAN infixExpr RPARAN if_b_m expr if_s_m RESERVED_ELSE if_i_m expr if_is_m if_e_m
 			| RESERVED_WHILE LPARAN wh_b_m infixExpr RPARAN wh_b_m expr wh_s_m wh_e_m
 			| RESERVED_DO do_b_m expr do_i_m RESERVED_WHILE LPARAN infixExpr RPARAN do_s_m
-			| RESERVED_FOR LPARAN enumerators RPARAN expr
-			| RESERVED_FOR LCURLYB enumerators RCURLYB expr
+			| RESERVED_FOR for_s_m LPARAN initExpr sep for_b_m condExpr sep for_i_m updExpr RPARAN for_is_m expr for_e_m
 			| RESERVED_THROW expr
 			| RESERVED_RETURN
 			| RESERVED_RETURN infixExpr
@@ -299,10 +309,154 @@ def p_expr(p):
 			| simpleExpr DOT IDENTIFIER EQ_ASGN expr
 			| simpleExpr1 argumentExprs EQ_ASGN expr
 			| postfixExpr
-			| postfixExpr RESERVED_MATCH LCURLYB caseClauses RCURLYB
+			| postfixExpr RESERVED_MATCH match_b_m LCURLYB caseClauses RCURLYB match_e_m
 	'''
+
+	if p.slice[1].type == "RETURN":
+		if len(p) == 2:
+			f.write(str(nextstat) + ": return" + +"\n")
+		elif len(p) == 3:
+			f.write(str(nextstat) + ": return " + str(p[2]['value']) + +"\n")
+
 	print("expr")
 	printp(p)
+
+def p_match_b_m(p):
+	'''match_b_m : epsilon
+	'''
+	global nextstat
+	global begin_max
+	global begin_curr
+	begin_max += 1
+	begin_curr.append(begin_max)
+	f.write(str(nextstat) + ": " + "goto " + " BEGIN" + str(begin_curr[-1]) +"\n")
+	nextstat += 1
+	S.startScope()
+
+def p_match_e_m(p):
+	'''match_e_m : epsilon
+	'''
+	global nextstat
+	global begin_curr
+	global for_after_curr
+	f.write(str(nextstat) + ": " + " BEGIN" + str(begin_curr[-1]) +"\n")
+	begin_curr.pop(-1)
+	nextstat += 1
+
+	for i in p[-2]:
+		if(i['place'][0] != "_"):
+			f.write(str(nextstat) + ": " + "if " + str(p[-6]['place']) + " = " + str(i['place'][0]) + " goto " + str(i['place'][1]) + "\n")
+			nextstat += 1
+		else:
+			f.write(str(nextstat) + ": " + " goto " + str(i['place'][1]) + "\n")
+			nextstat += 1
+
+	f.write(str(nextstat) + ": " +  "AFTER_F" + str(for_after_curr[-1]) + ":" + "\n")
+	nextstat += 1
+	for_after_curr.pop(-1)
+	S.endScope()
+
+def p_initExpr(p):
+	'''initExpr : epsilon
+				| subInitExpr
+				| initExpr COMMA subInitExpr
+				'''
+
+def p_subInitExpr(p):
+	'''subInitExpr : infixExpr
+				   | RESERVED_VAL valVarDef
+				   | RESERVED_VAR valVarDef
+				   | RESERVED_VAR valVarDcl
+	'''
+
+def p_condExpr(p):
+	'''condExpr : epsilon
+				| infixExpr
+				| infixExpr COMMA condExpr
+	'''
+	global nextstat
+	if p.slice[1].type != "epsilon":
+		global for_after_curr
+		f.write(str(nextstat) + ": " + "if " + p[-2]['place'] + " = 0 goto " + " AFTER_F" + str(for_after_curr[-1]) +"\n")
+		nextstat += 1
+
+	# AFTER_F is exit label, i.e. label taking you outside for loop
+
+def p_updExpr(p):
+	'''updExpr : epsilon
+				| infixExpr
+				| updExpr COMMA infixExpr
+	'''
+
+def p_for_s_m(p):
+	'''for_s_m : epsilon
+	'''
+	S.startScope()
+
+def p_for_b_m(p):
+	'''for_b_m : epsilon
+	'''
+	global nextstat
+	global for_begin_curr
+	global for_begin_max
+	for_begin_max += 1
+	for_begin_curr.append(for_begin_max)
+	f.write(str(nextstat) + ": " + "BEGIN_F" + str(for_begin_curr[-1]) + ":"+"\n")
+	nextstat += 1
+
+	global for_after_curr
+	global for_after_max
+	for_after_max += 1
+	for_after_curr.append(for_after_max)
+
+def p_for_i_m(p):
+	'''for_i_m : epsilon
+	'''
+	global nextstat
+	global after_curr
+	global after_max
+	after_max += 1
+	after_curr.append(after_max)
+	f.write(str(nextstat) + ": " + "goto " + "AFTER" + str(after_curr[-1]) +"\n")
+	# This AFTER label takes you to the beginning of for-loop body
+	nextstat += 1
+
+	global upd_curr
+	global upd_max
+	upd_max += 1
+	upd_curr.append(upd_max)
+	f.write(str(nextstat) + ": " + "UPD" + str(upd_curr[-1]) +"\n")
+	nextstat += 1
+
+def p_for_is_m(p):
+	'''for_is_m : epsilon
+	'''
+	global for_begin_curr
+	f.write(str(nextstat) + ": " + "goto " + "BEGIN_F" + str(for_begin_curr[-1]) +"\n")
+	for_begin_curr.pop(-1)
+	nextstat += 1
+
+	global after_curr
+	f.write(str(nextstat) + ": " + "AFTER:" + str(after_curr[-1]) +"\n")
+	# This AFTER label indicates the beginning of for-loop body
+	after_curr.pop(-1)
+	nextstat += 1
+
+def p_for_e_m(p):
+	'''for_e_m : epsilon
+	'''
+	global nextstat
+	global upd_curr
+	f.write(str(nextstat) + ": " + "goto " + "UPD" + str(upd_curr[-1]) +"\n")
+	upd_curr.pop(-1)
+	nextstat += 1
+
+	global for_ after_curr
+	f.write(str(nextstat) + ": " + "AFTER_F:" + str(for_after_curr[-1]) +"\n")
+	for_after_curr.pop(-1)
+	nextstat += 1
+	S.endScope()
+
 
 def p_wh_i_m(p):
 	'''wh_i_m : epsilon
@@ -441,39 +595,39 @@ def p_do_s_m(p):
 	after_curr.pop(-1)
 	nextstat += 1
 
-def p_enumerators(p):
-	'''enumerators 	: generator
-	'''
-	print("enumerators")
-	printp(p)
-
-def p_generator(p):
-	'''generator 	: pattern1 LEFTARROW expr
-					| pattern1 LEFTARROW expr guards
-	'''
-	print("generator")
-	printp(p)
-
-def p_guards(p):
-	'''guards 	: sep pattern1 EQ_ASGN expr
-				| guard
-				| sep guard
-				| sep pattern1 EQ_ASGN expr guards
-				| guard guards
-				| sep guard guards
-	'''
-	print("guards")
-	printp(p)
-
-def p_pattern1(p):
-	'''pattern1 : IDENTIFIER
-	'''
-	p[0] = {
-		'place' : p[1],
-		'type' : S.getType(p[1], "variables")
-	}
-	print("pattern1")
-	printp(p)
+# def p_enumerators(p):
+# 	'''enumerators 	: generator
+# 	'''
+# 	print("enumerators")
+# 	printp(p)
+#
+# def p_generator(p):
+# 	'''generator 	: pattern1 LEFTARROW expr
+# 					| pattern1 LEFTARROW expr guards
+# 	'''
+# 	print("generator")
+# 	printp(p)
+#
+# def p_guards(p):
+# 	'''guards 	: sep pattern1 EQ_ASGN expr
+# 				| guard
+# 				| sep guard
+# 				| sep pattern1 EQ_ASGN expr guards
+# 				| guard guards
+# 				| sep guard guards
+# 	'''
+# 	print("guards")
+# 	printp(p)
+#
+# def p_pattern1(p):
+# 	'''pattern1 : IDENTIFIER
+# 	'''
+# 	p[0] = {
+# 		'place' : p[1],
+# 		'type' : S.getType(p[1], "variables")
+# 	}
+# 	print("pattern1")
+# 	printp(p)
 
 def p_guard(p):
 	'''guard 	: RESERVED_IF postfixExpr
@@ -508,6 +662,8 @@ def p_simpleExpr1(p):
 					| simpleExpr1 argumentExprs
 	'''
 	global nextstat
+	global return_curr
+	global return_max
 	if p[1] == "_":
 		p[0] = {
 			"place" : "_",
@@ -516,17 +672,33 @@ def p_simpleExpr1(p):
 	elif len(p) == 2:
 		p[0] = p[1]
 	elif len(p) == 3:
-		# PASS : can be array or function call; check
 		# for array
 		if S.getType(p[1]['place'], "variables") != "":
 			u = S.newtemp()
-			f.write("nextstat " + ": " + u + " := " + "4 * " + p[2]["place"][0])
+			f.write("nextstat " + ": " + u + " := " + "4 * " + str(p[2]["place"][0]) + +"\n")
 			nextstat += 1
 			u2 = S.newtemp()
-			f.write("nextstat " + ": " + u2 + " := " + p[1]["place"] + " + " + u)
+			f.write("nextstat " + ": " + u2 + " := " + str(p[1]["place"]) + " + " + u + +"\n")
 			nextstat += 1
-		# else, it's a function call
-		# PASS
+		else:
+			# else, it's a function call
+			for i in p[2]:
+				if i['type'][0] == "SIMPLE_TYPE":
+					f.write("nextstat " + ": param " + str(i['place']) + +"\n")
+					nextstat += 1
+				else:
+					f.write("nextstat " + ": refparam " + str(i['place']) + +"\n")
+					nextstat += 1
+			# 3AC of result = function return statement
+			if (S.SymbolTable[p[1]['place']]["rType"] != 'VOID'):
+				return_max += 1
+				return_curr.append(return_max)
+				f.write(str(nextstat) + ": " + "refparam $result" + str(return_curr[-1]) + "\n")
+				nextstat += 1
+				p[0]['place'] = '$result' + str(return_curr[-1])
+				return_curr.pop(-1)
+			f.write(str(nextstat) + ": " + "call " + str(p[1]['place']) + ", " + str(len(p[2])) + "\n")
+			nextstat += 1
 	else:
 		if p.slice[1].type == "LPARAN":
 			p[0] = p[2]
@@ -547,23 +719,20 @@ def p_exprs(p):
 				| expr COMMA exprs
 	'''
 	if len(p) == 2:
-		p[0] = {
-		'place' : [p[1]],
-		'type' : ["", ""]
-		}
+		p[0] = [p[1]]
 	else:
-		p[0] = {
-		'place' : [p[1]] + p[3]['place'],
-		'type' : ["", ""]
-		}
+		p[0] = [p[1]] + p[3]
 	print("exprs")
 	printp(p)
 
 def p_argumentExprs(p):
-	'''argumentExprs 	: LPARAN epsilon RPARAN
+	'''argumentExprs 	: LPARAN RPARAN
 						| LPARAN exprs RPARAN
 	'''
-	p[0] = p[2]
+	if len(p) == 2:
+		p[0] = []
+	else:
+		p[0] = p[2]
 	print("argumentExprs")
 	printp(p)
 
@@ -901,15 +1070,43 @@ def p_caseClauses(p):
 	'''caseClauses 	: caseClause
 					| caseClause caseClauses
 	'''
+	if len(p) == 2:
+		p[0] = [p[1]]
+	else:
+		p[0] = [p[1]] + p[2]
 	print("caseClauses")
 	printp(p)
 
 def p_caseClause(p):
-	'''caseClause 	: RESERVED_CASE pattern block
-					| RESERVED_CASE pattern guard block
+	'''caseClause 	: RESERVED_CASE pattern RIGHT_ARROW caseClause_b_m block
 	'''
+	# | RESERVED_CASE pattern guard RIGHT_ARROW block
+	p[0] = {
+		'place' : (p[2]['place'], p[4]['place'])
+	}
+	global nextstat
+	global for_after_max
+	global for_after_curr
+	for_after_max += 1
+	for_after_curr.append(for_after_max)
+	f.write(str(nextstat) + ": goto AFTER_F " + str(for_after_curr[-1]) + +"\n")
+	nextstat += 1
 	print("caseClause")
 	printp(p)
+
+def p_caseClause_b_m(p):
+	'''caseClause_b_m : epsilon
+	'''
+	global nextstat
+	global L_curr
+	global L_max
+	L_max += 1
+	L_curr.append(L_max)
+	f.write(str(nextstat) + ": " + "L" + str(L_curr[-1]) + ":") + +"\n")
+	nextstat += 1
+	p[0] = {
+		'place' : "L" + str(L_curr[-1])
+	}
 
 def p_pattern(p):
 	'''pattern 	: literal
