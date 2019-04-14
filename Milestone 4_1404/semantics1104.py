@@ -388,11 +388,14 @@ def p_expr(p):
 			| postfixExpr
 			| postfixExpr RESERVED_MATCH match_b_m LCURLYB caseClauses RCURLYB match_e_m
 	'''
+	global nextstat
 	if p.slice[1].type == "RESERVED_RETURN":
 		if len(p) == 2:
 			f.write(str(nextstat) + ": return" +"\n")
+			nextstat += 1
 		elif len(p) == 3:
 			f.write(str(nextstat) + ": return " + str(p[2]['place']) +"\n")
+			nextstat += 1
 	elif len(p) == 2 and p.slice[1].type == "postfixExpr":
 		p[0] = p[1]
 	print("expr")
@@ -756,16 +759,15 @@ def p_simpleExpr1(p):
 		if S.getScope("variables", p[1]['place']) != "none":
 			u = S.newtemp()
 			Arraytype = S.getType(p[1]['place'], "variables")
-			print("-----------" + str(Arraytype[1]))
 			elemSize = S.getWidth(Arraytype[1][1])
 
 			# Error checking for index while accessing array element
 			if p[2][0]['type'] != ["SIMPLE_TYPE", "INT"]:
 				sys.exit('Array index not an integer')
 
-			scope = S.getScope("variables", p[1]['place'])
-			if (p[2][0]['place'] > S.SymbolTable[scope]["variables"][p[1]['place']]['Arraysize']):
-				sys.exit('Array index greater than size accessed')
+			# scope = S.getScope("variables", p[1]['place'])
+			# if (p[2][0]['place'] > S.SymbolTable[scope]["variables"][p[1]['place']]['Arraysize']):
+			# 	sys.exit('Array index greater than size accessed')
 
 
 			f.write(str(nextstat) + ": " + u + " := " + str(elemSize) +" * " + str(p[2][0]["place"]) +"\n")
