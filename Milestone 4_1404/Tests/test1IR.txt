@@ -1,0 +1,23 @@
+1: BEGIN FUNCTION test1.main:
+2: arr := 12
+3: $t1 = 1 int * 2
+4: $t2 = $t1 int + 3
+5: $t3 = 6 int / 7
+6: $t4 = $t2 int - $t3
+7: $t5 = $t4<<9
+8: x := $t5
+9: z := False
+10: y := True
+11: $t6:=z and y
+12: $t7:=y and z
+13: $t8:=$t6 or $t7
+14: y_z := $t8
+15: $t9 = x int * 5
+16: $t11 = inttofloat $t9
+17: $t10 = $t11 float/ 2.0
+18: $t13 = inttofloat x
+19: $t12 = $t10 float- $t13
+20: $t14 = $t12 float+ 75.0
+21: $t15 = $t14 float- 1e-06
+22: u := $t15
+23: END FUNCTION

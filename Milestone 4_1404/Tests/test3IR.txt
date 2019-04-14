@@ -1,0 +1,17 @@
+1: BEGIN FUNCTION test3.println:
+2: END FUNCTION
+3: BEGIN FUNCTION test3.main:
+4: arr := 12
+5: BEGIN0:
+7: if arr > 0 goto 10
+8: $t1 = 0
+9: goto 11
+10: $t1 = 1
+11: if $t1 = 0 goto AFTER0
+12: param arr
+13: call println, 1
+14: decr := 3
+15: arr := arr-decr
+16: goto BEGIN0
+17: AFTER0:
+18: END FUNCTION

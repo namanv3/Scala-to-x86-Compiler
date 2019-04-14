@@ -1,0 +1,13 @@
+1: BEGIN FUNCTION hello.println:
+2: END FUNCTION
+3: BEGIN FUNCTION hello.main:
+4: param ('Time to find the first element in an array', 'normal')
+5: call println, 1
+6: arr_myprecious := ARRAY{13,222,33,49,95,31}
+7: $t1 := None * 5
+8: $t2 := arr_myprecious + $t1
+9: x := $t2
+10: z := y
+11: refparam x
+12: call println, 1
+13: END FUNCTION

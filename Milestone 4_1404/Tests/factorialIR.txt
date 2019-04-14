@@ -1,0 +1,23 @@
+1: BEGIN FUNCTION FactorialRecursion.factorial:
+2: if n==0 goto 5
+3: $t1 = 0
+4: goto 6
+5: $t1 = 1
+6: if $t1 = 0 goto  ELSE0
+7: return 1
+7: goto AFTER0
+8: ELSE0:
+9: $t1 = n int - 1
+10: param $t1
+11: refparam $result0
+12: call factorial, 1
+13: $t2 = n int * $result0
+14: return $t2
+14: AFTER0:
+15: END FUNCTION
+16: BEGIN FUNCTION FactorialRecursion.main:
+17: param 5
+18: refparam $result1
+19: call factorial, 1
+20: fac_5 := $result1
+21: END FUNCTION

@@ -1,0 +1,26 @@
+1: BEGIN FUNCTION find_cube.func:
+2: arr := ARRAY{1,2,3,4}
+3: goto BEGIN0
+4: L0:
+5: param 5
+6: refparam $result0
+7: call func, 1
+8: goto AFTER_F0
+9: L1:
+10: x := 3
+11: goto AFTER_F0
+12: L2:
+13: y := 1
+14: goto AFTER_F0
+15: L3:
+16: param 1
+17: refparam $result1
+18: call func, 1
+19: goto AFTER_F0
+20: BEGIN0
+21: if x = 9 goto L0
+22: if x = 7 goto L1
+23: if x = 2 goto L2
+24: goto L3
+25: AFTER_F0:
+26: END FUNCTION

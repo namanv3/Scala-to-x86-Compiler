@@ -1,0 +1,12 @@
+1: BEGIN FUNCTION test4.main:
+2: arr := 12
+3: BEGIN0:
+3: arr := arr-1
+5: if arr > 0 goto 8
+6: $t1 = 0
+7: goto 9
+8: $t1 = 1
+9: if $t1 = 0 goto AFTER0
+10: goto BEGIN0
+11: AFTER0:
+12: END FUNCTION

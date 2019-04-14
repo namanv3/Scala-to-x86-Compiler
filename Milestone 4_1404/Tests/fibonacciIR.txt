@@ -1,0 +1,16 @@
+1: BEGIN FUNCTION Fibonacci.fib:
+2: $t1 = prevPrev int + prev
+3: next := $t1
+5: if next > 1000000 goto 8
+6: $t2 = 0
+7: goto 9
+8: $t2 = 1
+9: if $t2 = 0 goto  ELSE0
+10: return
+10: goto AFTER0
+11: ELSE0:
+12: AFTER0:
+13: param prev
+14: param next
+15: call fib, 2
+16: END FUNCTION

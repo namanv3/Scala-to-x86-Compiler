@@ -1,0 +1,27 @@
+1: BEGIN FUNCTION quicksort.partition:
+2: $t1 = start int + 1
+3: j := $t1
+4: i := end
+5: BEGIN0:
+7: if i > j goto 10
+8: $t2 = 0
+9: goto 11
+10: $t2 = 1
+11: if $t2 = 0 goto AFTER0
+12: i := i-1
+13: goto BEGIN0
+14: AFTER0:
+15: return j
+15: END FUNCTION
+16: BEGIN FUNCTION quicksort.qsort:
+18: if start >= end goto 21
+19: $t1 = 0
+20: goto 22
+21: $t1 = 1
+22: if $t1 = 0 goto  ELSE0
+23: return
+23: goto AFTER1
+24: ELSE0:
+25: AFTER1:
+26: $t2 := 4 * start
+27: $t3 := arr + $t2
