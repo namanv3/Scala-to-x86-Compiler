@@ -1,8 +1,0 @@
-1: BEGIN FUNCTION find_cube.func:
-2: arr:=[1, 2, 3, 4, '5', 'f(1)']
-3: x:=5
-4: y:=6
-5: $t2= inttofloat 1.0
-6: $t1=y float+ $t2
-7: inttofloat $t3=$t1
-8: x:=$t3
