@@ -5,6 +5,7 @@ import json
 
 global_scope_no = 0
 scopelist = []
+global_temp_count = 0
 class SymbolTable:
 
     def __init__(self):
@@ -24,23 +25,39 @@ class SymbolTable:
         global scopelist
         scopelist.append("none")
 
-    def addVar(self, idVal, idType, lineno, idSize = 4, typeArray = None, objSize = None, Arraysize = 0):
+    def Linking(self):
+        # Linking
+        self.addFunc("printf", 0, ["VOID", "VOID"], 0)
+        self.endScope()
+        self.addFunc("malloc", 0, ["VOID", "VOID"], 0)
+        self.endScope()
+        self.addFunc("scanf", 0, ["VOID", "VOID"], 0)
+        self.endScope()
+
+
+    def addVar(self, idVal, idType, lineno, idSize, idtempName, typeArray = None, objSize = None, Arraysize = None):
         scope = self.getScope("variables", idVal)
         if scope != self.curr_scope:
             self.SymbolTable[self.curr_scope]["variables"][idVal] = {
                 "type" : idType,
                 "size" : idSize,
-                "Arraysize" : 0
+                "Arraysize" : 0,
+                'tempName' : idtempName
             }
             if idType[0] == "ARRAY":
-                w = self.getWidth(typeArray[1])
-                self.SymbolTable[self.curr_scope]["variables"][idVal]["Arraysize"] = Arraysize
-                # DISCUSS
-                # size = reduce(operator.mul, self.SymbolTable[self.curr_scope]["variables"][idVal]["size"], 1)
-                # self.SymbolTable[self.curr_scope]["offset"] += size * w
+                if Arraysize == None:
+                    self.SymbolTable[self.curr_scope]["offset"] += 4
+                else:
+                    self.SymbolTable[self.curr_scope]["variables"][idVal]["Arraysize"] = Arraysize
+                    if not any(not isinstance(y,(int)) for y in Arraysize):
+                        self.SymbolTable[self.curr_scope]["offset"] += 4 * eval("*".join(str(item) for item in Arraysize))
+                    # Arrays defined using 'new' go to heap
+                    self.SymbolTable[self.curr_scope]["variables"][idVal]["size"] = self.SymbolTable[self.curr_scope]["offset"]
+
                 self.SymbolTable[self.curr_scope]["variables"][idVal]["typeArray"] = typeArray
             elif objSize is not None:
-                self.SymbolTable[self.curr_scope]["offset"] += objSize
+                # self.SymbolTable[self.curr_scope]["offset"] += objSize
+                self.SymbolTable[self.curr_scope]["offset"] += 4
             else:
                 self.SymbolTable[self.curr_scope]["offset"] += idSize
 
@@ -49,9 +66,33 @@ class SymbolTable:
             sys.exit("ERROR on line "+ str(lineno) +" : Variable "+ str(idVal) +"already declared in this scope")
 
 
+    def addFuncParamVar(self, idVal, idType, lineno, idSize, idtempName, typeArray = None, objSize = None, Arraysize = None):
+        scope = self.getScope("variables", idVal)
+        if scope != self.curr_scope:
+            self.SymbolTable[self.curr_scope]["variables"][idVal] = {
+                "type" : idType,
+                "size" : idSize,
+                "Arraysize" : 0,
+                'tempName' : idtempName
+            }
+            if idType[0] == "ARRAY":
+                self.SymbolTable[self.curr_scope]["offset"] += 4
+            elif objSize is not None:
+                # self.SymbolTable[self.curr_scope]["offset"] += objSize
+                self.SymbolTable[self.curr_scope]["offset"] += 4
+            else:
+                self.SymbolTable[self.curr_scope]["offset"] += idSize
+
+            self.SymbolTable[self.curr_scope]["variables"][idVal]["offset"] = self.SymbolTable[self.curr_scope]["offset"]
+        else:
+            sys.exit("ERROR on line "+ str(lineno) +" : Variable "+ str(idVal) +"already declared in this scope")
+
+        self.SymbolTable[self.curr_scope]["params"][idVal] = self.SymbolTable[self.curr_scope]["variables"][idVal]
+
+
     def addFunc(self, funcVal, lineno, returnType = None, def_c = 0):
         scope = self.getScope("functions", funcVal)
-        if scope == self.curr_scope:
+        if scope == self.curr_scope and self.curr_scope != "none":
             if self.SymbolTable[funcVal]["fdef"] == 1:
                 sys.exit("ERROR on line "+str(lineno)+" : Function "+str(funcVal)+" already declared in this scope")
             else:
@@ -64,6 +105,7 @@ class SymbolTable:
                 "rType" : returnType,
                 "variables" : {},
                 "functions" : {},
+                "params" : {},
                 "parent" : self.curr_scope,
                 "offset" : 4,
                 "paramoffset" : -8,
@@ -74,19 +116,21 @@ class SymbolTable:
                 "fname" : funcVal,
                 "rType" : returnType
                 }
-        if def_c == 1:                                                                 # adding entry corresponding to function body
-            self.curr_scope = funcVal
+
+        self.curr_scope = funcVal
+        if def_c == 1:
             self.SymbolTable[self.curr_scope]["fdef"] = 1
-            global scopelist
-            scopelist.append(funcVal)
+        global scopelist
+        scopelist.append(funcVal)
 
 
-    def addParamVar(self, idVal, idType,  lineno, idSize = 4, typeArray = None):
+    def addParamVar(self, idVal, idType,  lineno, idSize, idtempName, typeArray = None):
         scope = self.getScope("variables", idVal)
         if scope != self.curr_scope:
             self.SymbolTable[self.curr_scope]["variables"][idVal] = {
                     "type" : idType,
                     "size" : idSize,
+                    "tempName" : idtempName
                     }
             if idType[0] == "Array":
                 size = 4
@@ -106,7 +150,6 @@ class SymbolTable:
                 "type" : "classes",
                 "variables" : {},
                 "functions" : {},
-                "rType" : "undefined",
                 "parent" : parent,
                 "offset" : 0,
                 "paramoffset": -8,
@@ -115,11 +158,12 @@ class SymbolTable:
         self.curr_scope = classVal
         global scopelist
         scopelist.append(classVal)
+        self.Linking()
 
     def addObject(self, objVal, parent="none"):
         self.SymbolTable[objVal]={
                 "name" : objVal,
-                "type" : "OBJECT",
+                "type" : "objects",
                 "variables" : {},
                 "functions" : {},
                 "parent" : parent,
@@ -130,11 +174,13 @@ class SymbolTable:
         self.curr_scope = objVal
         global scopelist
         scopelist.append(objVal)
+        self.Linking()
 
 
     def getScope(self, key, idVal):
         scope = self.curr_scope
         while scope != "none":
+            print(scope)
             if idVal in self.SymbolTable[scope][key].keys():
                 return scope
             scope = self.SymbolTable[scope]["parent"]
@@ -162,7 +208,9 @@ class SymbolTable:
 
     def newtemp(self):
         self.SymbolTable[self.curr_scope]["temp"] += 1
-        tempvar = "$t" + str(self.SymbolTable[self.curr_scope]["temp"])
+        global global_temp_count
+        tempvar = "$t" + str(global_temp_count)
+        global_temp_count += 1
         return tempvar
 
     def addtemptoST(self, idVal, idType, idSize):
@@ -183,10 +231,11 @@ class SymbolTable:
             # sys.exit('Identifier \'' + str(idVal) + '\' not declared in scope')
 
     def getWidth(self,idType):
-        if idType == "BOOLEAN": return 1
-        elif idType == "CHAR": return 1
-        elif idType == "INT": return 4
-        elif idType == "FLOAT": return 8
+        # if idType == "BOOLEAN": return 1
+        # elif idType == "CHAR": return 1
+        # elif idType == "INT": return 4
+        # elif idType == "FLOAT": return 8
+        return 4
 
     def printSymbolTable(self, filename):
         f = open(filename, "w+")

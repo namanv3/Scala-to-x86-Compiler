@@ -463,7 +463,7 @@ def p_arrayType(p):
 
 def p_basicTypes(p):
 	'''basicTypes 	: TYPE_CHAR
-					| TYPE_BOOL
+					| TYPE_BOOLEAN
 					| TYPE_BYTE
 					| TYPE_SHORT
 					| TYPE_INT
